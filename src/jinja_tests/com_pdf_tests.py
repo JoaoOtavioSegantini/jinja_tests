@@ -1,6 +1,4 @@
-"""Module providing a function for logs."""
 import logging
-
 from jinja2 import Environment, FileSystemLoader
 from pdfkit import from_string
 
@@ -17,13 +15,9 @@ def criar_pdf():
 
     template_output = env.get_template("test.html").render(template_variaveis)
 
-    conteudo_arquivo = from_string(
-        template_output,
-        False,
-        css=["src/jinja_tests/styles/template.css"]
+    return from_string(
+        template_output, False, css=["src/jinja_tests/styles/template.css"]
     )
-
-    return conteudo_arquivo
 
 
 def salvar_pdf(conteudo_pdf) -> None:
@@ -33,7 +27,7 @@ def salvar_pdf(conteudo_pdf) -> None:
     try:
         with open("src/jinja_tests/out/resultado.pdf", 'wb+') as pdf:
             pdf.write(conteudo_pdf)
-    except Exception as error: #pylint: disable=W0718:broad-exception-caught
+    except Exception as error:  # pylint: disable=W0718:broad-exception-caught
         logging.error("Falha ao salvar o arquivo. Erro: %s", error)
 
 
