@@ -3,9 +3,40 @@ version: '3'
 services:
   app:
     build: .
-    container_name: micro-videos-python-app
+    container_name: jinja
     command: ./.docker/start-app.sh
     volumes:
       - .:/home/python/app
     ports:
       - "8000:8000"
+    networks:
+        - app-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: ${SQL_SERVER_PASS}
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    networks:
+        - app-network
+
+  mssqltools:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./.docker/data/create_objects.sql:/tmp/create_tables.sql
+      - ./.docker/data/database_seed.sql:/tmp/seed.sql
+      - ./.docker/mssql/init-database.sh:/tmp/init-database.sh
+    command: /bin/bash ./tmp/init-database.sh
+    networks:
+      - app-network
+    env_file:
+      - .env
+
+networks:
+    app-network:
+        driver: bridge
