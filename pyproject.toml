@@ -33,3 +33,4 @@ dev = [
 runApp = "python ./src/jinja_tests/com_pdf_tests.py"
 pep8 = "autopep8 --in-place --recursive ./src"
 pylint = "pylint ./src"
+runTest = "python ./src/jinja_tests/{args}_test.py"
