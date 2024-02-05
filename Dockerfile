@@ -8,7 +8,16 @@ RUN apt update && apt install -y --no-install-recommends \
                     wget \
                     fonts-powerline \
                     gnupg \
-                    wkhtmltopdf
+                    wkhtmltopdf \
+                    gnupg2 apt-transport-https gpg \
+                    && apt clean
+
+RUN wget -q -O- https://packages.microsoft.com/keys/microsoft.asc | \
+    gpg --dearmor | tee /usr/share/keyrings/microsoft.gpg > /dev/null 2>&1
+
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add && echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" | tee /etc/apt/sources.list.d/mssql-release.list
+
+RUN apt update && ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools unixodbc-dev && apt clean
 
 RUN useradd -ms /bin/bash python
 
@@ -37,5 +46,6 @@ RUN echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> ~/.zshrc && \
     echo 'HISTFILE=/home/python/zsh/.zsh_history' >> ~/.zshrc && \
     echo 'eval "$(pdm --pep582)"' >> ~/.zshrc && \
     echo 'eval "$(pdm --pep582)"' >> ~/.bashrc
+
 
 CMD [ "tail", "-f", "/dev/null" ]
