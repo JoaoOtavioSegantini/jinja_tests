@@ -33,7 +33,8 @@
 				"sourcery.sourcery",
 				"tamasfe.even-better-toml",
 				"humao.rest-client",
-				"ms-python.vscode-pylance"	
+				"ms-python.vscode-pylance",
+				"ms-azuretools.vscode-docker"	
 			]
 		}
 	},
