@@ -14,6 +14,8 @@ services:
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    depends_on:
+      - app
     environment:
       SA_PASSWORD: ${SQL_SERVER_PASS}
       ACCEPT_EULA: "Y"
