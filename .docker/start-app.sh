@@ -2,6 +2,8 @@
 
 pdm install
 
-#eval "$(pdm --pep582)"
+if [  ! -f ".env" ]; then
+   cp .env.example .env
+fi
 
 tail -f /dev/null
