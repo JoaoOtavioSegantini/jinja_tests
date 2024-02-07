@@ -14,6 +14,12 @@ services:
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${SQL_SERVER_PASS} -Q 'SELECT 1' -b -o /dev/null
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     depends_on:
       - app
     environment:
@@ -28,7 +34,8 @@ services:
   mssqltools:
     image: mcr.microsoft.com/mssql-tools
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
     volumes:
       - ./.docker/data/create_objects.sql:/tmp/create_tables.sql
       - ./.docker/data/database_seed.sql:/tmp/seed.sql
