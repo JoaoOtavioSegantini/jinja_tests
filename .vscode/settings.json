@@ -1,6 +1,15 @@
 {
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/__pypackages__/3.10/lib"
+    ],
     "python.analysis.extraPaths": [
-        "./__pypackages__/3.10/lib",
-        "./src/jinja_tests"
-    ]
+        "${workspaceFolder}/__pypackages__/3.10/lib"
+    ],
+    "python.testing.pytestArgs": [
+        "src",
+        "--ignore",
+        "__pypackages__",
+        "-s"
+    ],
+
 }
